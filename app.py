@@ -10,7 +10,7 @@ st.set_page_config(
 )
 
 # Load the trained model
-with open("loan_approval_decision_tree.pkl", "rb") as file:
+with open("loan_approval_model.pkl", "rb") as file:
     model = pickle.load(file)
 
 # Application title
