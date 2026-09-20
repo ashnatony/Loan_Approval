@@ -1,17 +1,21 @@
 
 import streamlit as st
 import pandas as pd
-import pickle
+import joblib
 
 # Page configuration
 st.set_page_config(
     page_title="Loan Approval Prediction",
-    page_icon="💰"
+    page_icon="💰",
+    layout="centered"
 )
 
 # Load the trained model
-with open("loan_approval_model.pkl", "rb") as file:
-    model = pickle.load(file)
+try:
+    model = joblib.load("loan_approval_model.pkl")
+except Exception as e:
+    st.error(f"Error loading model: {e}")
+    st.stop()
 
 # Application title
 st.title("Loan Approval Prediction")
@@ -48,7 +52,9 @@ if st.button("Predict Loan Approval"):
     prediction = model.predict(input_data)[0]
 
     # Display result
-    if str(prediction).strip().lower() in ["1", "yes", "approved", "true"]:
-        st.success("LOAN APPROVED")
+    prediction_text = str(prediction).strip().lower()
+
+    if prediction_text in ["1", "yes", "approved", "true"]:
+        st.success("✅ LOAN APPROVED")
     else:
-        st.error("LOAN NOT APPROVED")
+        st.error("❌ LOAN NOT APPROVED")
